@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Portfolio {
+  id       Int       @id @default(autoincrement())
+  user     User      @relation(fields: [userId], references: [id])
+  sections Section[]
+  userId   Int
+}
+
+model Section {
+  id              Int        @id @default(autoincrement())
+  title           String
+  description     String
+  backgroundImage String
+  Portfolio       Portfolio? @relation(fields: [portfolioId], references: [id])
+  portfolioId     Int?
+}
+
+model Piece {
+  id              Int               @id @default(autoincrement())
+  name            String
+  description     String
+  primaryImage    String
+  secondaryImages SecondaryImages[]
+}
+
+model SecondaryImages {
+  id       Int    @id @default(autoincrement())
+  fileName String
+  altText  String
+  Piece    Piece? @relation(fields: [pieceId], references: [id])
+  pieceId  Int?
+}
+
+model User {
+  id        Int         @id @default(autoincrement())
+  userName  String
+  firstName String
+  lastName  String
+  email     String
+  Portfolio Portfolio[]
+}
