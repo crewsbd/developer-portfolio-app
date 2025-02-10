@@ -1,5 +1,6 @@
 .portfolio_section {
-    background-color: gray;
+    background-color: var(--secondary-bg);
+    color: var(--secondary-fg);
     padding: 1rem;
     border-radius: .26rem;
 }

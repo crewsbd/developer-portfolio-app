@@ -1,8 +1,9 @@
 import Section from '@/components/Section';
 
-export default function Page() {
+export default async function Page() {
+    "use server"
     return <>
-    <h1>HOME PAGE</h1>
+    <h2>Home Page</h2>
         <Section/>
         <Section/>
         <Section/>
