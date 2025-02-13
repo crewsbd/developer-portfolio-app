@@ -26,6 +26,7 @@ model Section {
   title           String
   description     String
   backgroundImage String
+  pieces          Piece[]
   Portfolio       Portfolio? @relation(fields: [portfolioId], references: [id])
   portfolioId     Int?
 }
@@ -36,6 +37,8 @@ model Piece {
   description     String
   primaryImage    String
   secondaryImages SecondaryImages[]
+  Section         Section?          @relation(fields: [sectionId], references: [id])
+  sectionId       Int?
 }
 
 model SecondaryImages {

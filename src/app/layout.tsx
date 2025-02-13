@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { auth } from "@/auth";
+import { SessionProvider } from "next-auth/react";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -26,14 +27,16 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body>
-        <header>
-          <h1>Developer Portfolio</h1>
-          <div>{session ? session.user?.name : "\u00A0"} </div>
-        </header>
-        <main>{children}</main>
-        <footer></footer>
-      </body>
+      <SessionProvider>
+        <body>
+          <header>
+            <h1>Developer Portfolio</h1>
+            <div>{session ? session.user?.name : "\u00A0"} </div>
+          </header>
+          <main>{children}</main>
+          <footer></footer>
+        </body>
+      </SessionProvider>
     </html>
   );
 }
