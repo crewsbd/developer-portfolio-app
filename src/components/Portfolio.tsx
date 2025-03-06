@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import Link from "next/link";
 import Section from "./Section";
 import { auth } from "@/auth";
 import styles from "@/components/Portfolio.module.css";
@@ -22,7 +23,10 @@ export default async function Portfolio({ id }: { id: number }) {
     },
     include: {
       sections: {
-        include: { pieces: true },
+        include: {
+          pieces: { include: { images: true } },
+          backgroundImage: true,
+        },
       },
     },
   });
@@ -30,11 +34,16 @@ export default async function Portfolio({ id }: { id: number }) {
   console.dir(portfolio);
 
   return (
-    <div className={styles.portfolio}>
-      <h2>{session?.user?.name}&apos;s Portfolio </h2>
-      {portfolio?.sections.map((section) => (
-        <Section key={section.id} section={section} />
-      ))}
-    </div>
+    <>
+      <div className={styles.portfolio}>
+        <h2>{session?.user?.name}&apos;s Portfolio </h2>
+        {portfolio?.sections.map((section) => (
+          <Section key={section.id} section={section} />
+        ))}
+      </div>
+      <div>
+        <Link href={`/portfolio/${id}/edit`}>Edit</Link>
+      </div>
+    </>
   );
 }

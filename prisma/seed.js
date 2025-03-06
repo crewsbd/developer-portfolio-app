@@ -1,39 +1,50 @@
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
+
+//Get the first user you find
 const user = await prisma.user.findFirst({});
 
-// Seed a portfolio
+// Make some image records
+const image1 = await prisma.image.create({
+  data: {
+    url: "blank.svg",
+    ownerId: user.id,
+  },
+});
+const image2 = await prisma.image.create({
+  data: { url: "https://picsum.photos/200/300", ownerId: user.id },
+});
+
+// Seed a portfolio to that user
 const portfolio = await prisma.portfolio.create({
   data: {
     userId: user?.id || "",
+    description: `This is the seeded portfolio for ${user.name}`,
   },
 });
 // Seed a section into the portfolio
 const section = await prisma.section.create({
   data: {
     title: "Front End Web",
-    portfolioId: portfolio.id || 1,
+    Portfolio: { connect: { id: portfolio.id } },
+    // portfolioId: portfolio.id || 1,
     description:
       "Some projects that showcase unique or interesting front ends.",
-    backgroundImage: "https://picsum.photos/200/300",
+    backgroundImage: { connect: { id: image1.id } },
+    // backgroundImage: image1.id,
   },
 });
 // Seed a piece into the section
-const piece = await prisma.piece.create({
+await prisma.piece.create({
   data: {
     name: "Developer Portfolio",
     description:
       "A simple Next.js app router web site hosted on AWS with Prisma ORM connecting to a Postgresql database.",
-    primaryImage: "https://picsum.photos/200/300",
+    primaryImage: 0,
     sectionId: section.id,
-  },
-});
-// Seed a secondary image into the piece
-await prisma.secondaryImages.create({
-  data: {
-    fileName: "https://picsum.photos/200/300",
-    altText: "Developer Portfolio screenshot",
-    pieceId: piece.id,
+    images: {
+      connect: [{ id: image1.id }, { id: image2.id }],
+    },
   },
 });

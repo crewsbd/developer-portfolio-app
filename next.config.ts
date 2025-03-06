@@ -9,6 +9,16 @@ const nextConfig: NextConfig = {
         hostname: "picsum.photos",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "portfolio-akljlabowi.s3.us-west-1.amazonaws.com",
+        port: "",
+      },
     ],
   },
 };

@@ -15,53 +15,58 @@ datasource db {
 }
 
 model Portfolio {
-  id       Int       @id @default(autoincrement())
-  user     User      @relation(fields: [userId], references: [id])
-  sections Section[]
-  userId   String
+  id          Int       @id @default(autoincrement())
+  user        User      @relation(fields: [userId], references: [id])
+  description String
+  sections    Section[]
+  userId      String
 }
 
 model Section {
   id              Int        @id @default(autoincrement())
   title           String
   description     String
-  backgroundImage String
+  backgroundImage Image      @relation(fields: [imageId], references: [id])
   pieces          Piece[]
   Portfolio       Portfolio? @relation(fields: [portfolioId], references: [id])
-  portfolioId     Int?
+  portfolioId     Int
+  imageId         Int
 }
 
 model Piece {
-  id              Int               @id @default(autoincrement())
-  name            String
-  description     String
-  primaryImage    String
-  secondaryImages SecondaryImages[]
-  Section         Section?          @relation(fields: [sectionId], references: [id])
-  sectionId       Int?
+  id           Int      @id @default(autoincrement())
+  name         String
+  description  String
+  primaryImage Int // Which of the images should be highlighted
+  images       Image[]
+  section      Section? @relation(fields: [sectionId], references: [id])
+  sectionId    Int?
 }
 
-model SecondaryImages {
-  id       Int    @id @default(autoincrement())
-  fileName String
-  altText  String
-  Piece    Piece? @relation(fields: [pieceId], references: [id])
-  pieceId  Int?
+model Image {
+  id          Int       @id @default(autoincrement())
+  url         String // S3 bucket url for image
+  forPieces   Piece[]
+  forSections Section[]
+  owner       User      @relation("imageOwner", fields: [ownerId], references: [id])
+  ownerId     String
 }
 
 model User {
   id            String      @id @default(cuid())
   name          String?
-  email         String      @unique
+  email         String?     @unique
   emailVerified DateTime?
-  image         String?
+  image         String? //This is the url to the github image
   accounts      Account[]
   sessions      Session[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+  // End auth.js required fields
   firstName     String?
   lastName      String?
-  Portfolio     Portfolio[]
+  portfolios    Portfolio[]
+  images        Image[]     @relation("imageOwner")
 }
 
 model Account {
