@@ -9,29 +9,40 @@
 .portfolio .section {
   display: flex;
   flex-direction: column;
+  justify-content: start;
   border: 2px solid var(--secondary-bg);
   border-radius: 0.5rem;
   padding: 1rem;
-  gap: 1rem;
+  gap: .5rem;
   box-shadow: 0 0.5rem 0.2rem rgba(0, 0, 0, 0.127);
   background-clip: padding-box;
   background-repeat: no-repeat;
   background-size: cover;
 }
+.portfolio .section form {
+  display: none;
+  margin: 0;
+  padding: 0;
+}
+.portfolio .section textarea {
+  width: 100%;
+  height: 7rem;
+  resize: none;
+}
+
 .portfolio .piece {
   display: flex;
   flex-direction: column;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  gap: 1rem;
-  border-top: 2px solid rgba(255, 255, 255, 0.366);
-  border-bottom: 2px solid rgba(0, 0, 0, 0.369);
+  /* padding-top: 1rem;
+  padding-bottom: 1rem; */
+  gap: .5rem;
+  /* border-top: 2px solid rgba(255, 255, 255, 0.721);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.771); */
+  /* background-color: red; */
+  padding: 1rem;
+  border: 2px solid black;
 }
-.portfolio .piece form {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
+
 
 .horizontal-buttons {
   /* background-color: green; */
@@ -39,4 +50,20 @@
   flex-direction: row;
   width: fit-content;
   align-self: end;
+  gap:.5rem;
+}
+.icon-button {
+  background-color: unset;
+  padding: 0;
+  border: unset;
+}
+.icon-button:hover {
+  border: unset;
+  box-shadow: unset;
+  background-color: unset;
+  transform: scale(1.1);
+}
+.icon-button img {
+  height: 2rem;
+  width: auto;
 }

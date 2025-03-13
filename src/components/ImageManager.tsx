@@ -15,7 +15,6 @@ export function ImageManager({
   onClose,
 }: {
   imageDataMutator: ({ id, url }: { id: number; url: string }) => null;
-
   onClose: () => void;
 }) {
   // Setup

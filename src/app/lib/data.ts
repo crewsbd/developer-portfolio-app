@@ -2,6 +2,8 @@
 import { PrismaClient } from "@prisma/client";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client } from "@/app/lib/storage";
+// import { PortfolioType } from "./types";
+import { error } from "console";
 
 const prisma = new PrismaClient();
 
@@ -10,19 +12,26 @@ export async function getPortfolio(id: number) {
     where: {
       id: id,
     },
-    include: {
-      sections: {
-        include: { 
-          pieces: { 
-            include: { 
-              images: true } } },
-      },
-    },
   });
-
-  
   return portfolio;
 }
+
+export async function updatePortfolio(data: {
+  id: number;
+  description: string;
+}) {
+  if (data && data.id) {
+    await prisma.portfolio.update({
+      where: { id: data.id },
+      data: {
+        description: data.description,
+      },
+    });
+  } else {
+    throw error("Malformed data");
+  }
+}
+
 export async function getPortfolioNames() {
   const portfolios = await prisma.portfolio.findMany({
     include: {
@@ -35,6 +44,66 @@ export async function getPortfolioNames() {
     },
   });
   return portfolios;
+}
+
+export async function getSection(id: number) {
+  const section = await prisma.section.findFirst({
+    where: {
+      id: id,
+    },
+  });
+  return section;
+}
+
+export async function getSectionIds(portfolioId: number) {
+  const sectionIds = await prisma.section.findMany({
+    where: { portfolioId: portfolioId },
+    select: {
+      id: true,
+    },
+  });
+  const idList = sectionIds.map((section) => {
+    return section.id;
+  });
+  return idList;
+}
+
+export async function updateSection(sectionData: {
+  id: number;
+  title: string;
+  description: string;
+  imageId: number;
+}) {
+  await prisma.section.update({
+    where: {
+      id: sectionData.id,
+    },
+    data: {
+      title: sectionData.title,
+      description: sectionData.description,
+      imageId: sectionData.imageId,
+    },
+  });
+}
+
+export async function getPiece(pieceId: number) {
+  const piece = await prisma.piece.findFirst({
+    where: { id: pieceId },
+  });
+  return piece;
+}
+
+export async function getPieceIds(sectionId: number) {
+  const pieceIds = await prisma.piece.findMany({
+    where: { sectionId: sectionId },
+    select: {
+      id: true,
+    },
+  });
+  const idList = pieceIds.map((piece) => {
+    return piece.id;
+  });
+  return idList;
 }
 
 export async function updatePiece(piece: {

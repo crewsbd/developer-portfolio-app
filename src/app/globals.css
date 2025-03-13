@@ -68,6 +68,7 @@ input, button, textarea {
     background-color: var(--secondary-bg);
     color: var(--secondary-fg);
     border-radius: .5rem;
+    box-sizing: border-box;
 }
 input:hover, button:hover, textarea:hover, input:focus, button:focus, textarea:focus {
     border: 2px solid var(--primary-fg);
