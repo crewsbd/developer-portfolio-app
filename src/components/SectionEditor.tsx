@@ -24,7 +24,7 @@ export default function SectionEditor({ sectionId }: { sectionId: number }) {
       });
   }, [sectionId]);
 
-  const [pieceIds, changePieceIds] = useState<number[] | null>(null);
+  const [pieceIds, changePieceIds] = useState<number[]>([]);
   useEffect(() => {
     getPieceIds(sectionId)
       .then((response) => response)
@@ -57,7 +57,11 @@ export default function SectionEditor({ sectionId }: { sectionId: number }) {
   return (
     <div className={styles.section}>
       <div className={styles["horizontal-buttons"]}>
-        <button form={`section-${sectionId}`} className={styles["icon-button"]}>
+        <button
+          type="submit"
+          form={`section-${sectionId}`}
+          className={styles["icon-button"]}
+        >
           <Image
             src="/base/save-dark.svg"
             alt="Save icon"

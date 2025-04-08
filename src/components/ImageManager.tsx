@@ -11,10 +11,9 @@ import { getUserImages } from "@/app/lib/data";
 // TODO: Implement object to update, to get selected image to correct field.
 export function ImageManager({
   imageDataMutator,
-
   onClose,
 }: {
-  imageDataMutator: ({ id, url }: { id: number; url: string }) => null;
+  imageDataMutator: (newValue: number) => void;
   onClose: () => void;
 }) {
   // Setup
@@ -68,7 +67,7 @@ export function ImageManager({
                 alt={`User generated image ${image.id}`}
                 unoptimized={true}
                 onClick={() => {
-                  imageDataMutator({ id: image.id, url: image.url });
+                  imageDataMutator(image.id);
                 }}
               ></Image>
             );

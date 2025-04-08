@@ -1,10 +1,8 @@
 import { signIn } from "@/auth";
 import styles from "@/components/SignInOut.module.css";
 
-
 export default async function SignIn() {
   "use server";
-
 
   return (
     <form

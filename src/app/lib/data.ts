@@ -106,12 +106,32 @@ export async function getPieceIds(sectionId: number) {
   return idList;
 }
 
+export async function getImageIdsForPiece(pieceId: number) {
+  const imageIds = await prisma.image.findMany({
+    where: {
+      forPieces: {
+        some: {
+          id: pieceId,
+        },
+      },
+    },
+    select: {
+      id: true,
+    },
+  });
+  const idList = imageIds.map((image) => {
+    return image.id;
+  });
+  return idList;
+}
+
 export async function updatePiece(piece: {
   id: number;
   name: string;
   description: string;
   imageId: number;
   sectionId: number;
+  images: number[];
 }) {
   // TODO: Store image. Store in S3?
 
@@ -124,6 +144,9 @@ export async function updatePiece(piece: {
       description: piece.description,
       primaryImage: 1,
       sectionId: piece.sectionId,
+      images: {
+        set: piece.images.map((id) => ({ id })),
+      },
     },
   });
   return result;
@@ -134,6 +157,16 @@ export async function getUserImages(id: string) {
     where: { ownerId: id },
   });
   return imageRecords;
+}
+
+export async function getImageById(imageID: number) {
+  const result = await prisma.image.findUnique({
+    where: {
+      id: imageID,
+    },
+  });
+
+  return result;
 }
 
 export async function postImage(formData: FormData) {
