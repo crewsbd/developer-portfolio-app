@@ -42,6 +42,16 @@ export function ImageManager({
     loadImages();
   }, [session?.user?.id, refresher]);
 
+  async function uploadImageFormHandler(
+    event: React.FormEvent<HTMLFormElement>
+  ) {
+    await postImage(new FormData(event.currentTarget));
+
+    setTimeout(() => {
+      changeRefresher((prev) => prev + 1);
+    }, 2000);
+  }
+
   // Template
   return (
     <dialog
@@ -73,15 +83,7 @@ export function ImageManager({
             );
           })}
         </div>
-        <form
-          action={(formData) => {
-            postImage(formData).then(() => {
-              setTimeout(() => {
-                changeRefresher((prev) => prev + 1);
-              }, 2000);
-            });
-          }}
-        >
+        <form onSubmit={uploadImageFormHandler}>
           <input
             type="hidden"
             name="userId"
